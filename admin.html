@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>پنل مدیریت پیشرفته - Lumina Café</title>
+  <title>پنل مدیریت - Lumina Café</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 </head>
@@ -11,82 +11,92 @@
   <div class="max-w-2xl mx-auto p-6">
 
     <div class="flex justify-between items-center mb-8">
-      <h1 class="text-3xl font-bold">پنل مدیریت Lumina Café</h1>
-      <a href="index.html" class="text-amber-400 flex items-center gap-2 hover:underline">
-        <i class="fa-solid fa-eye"></i> دیدن منو
+      <h1 class="text-3xl font-bold flex items-center gap-3">
+        <i class="fa-solid fa-mug-hot text-amber-500"></i>
+        پنل مدیریت
+      </h1>
+      <a href="index.html" class="text-amber-400 hover:underline flex items-center gap-2">
+        <i class="fa-solid fa-eye"></i> منوی مشتری
       </a>
     </div>
 
-    <div class="flex gap-3 mb-6">
-      <button onclick="downloadJSON()" class="flex-1 bg-amber-600 hover:bg-amber-700 py-3 rounded-2xl font-medium">
-        <i class="fa-solid fa-download"></i> دانلود JSON
-      </button>
-      <label class="flex-1 bg-zinc-800 hover:bg-zinc-700 py-3 rounded-2xl font-medium text-center cursor-pointer">
-        <i class="fa-solid fa-upload"></i> بارگذاری JSON
-        <input type="file" id="fileInput" accept=".json" class="hidden" onchange="loadJSONFile(event)">
-      </label>
+    <!-- GitHub Token -->
+    <div class="bg-zinc-900 rounded-3xl p-6 mb-8">
+      <label class="block text-sm mb-3 font-medium">GitHub Personal Access Token</label>
+      <input type="password" id="githubToken" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" 
+             class="w-full bg-zinc-800 border border-zinc-700 rounded-2xl p-4 focus:border-amber-500 outline-none">
+      <p class="text-xs text-zinc-500 mt-2">توکن فقط در این مرورگر ذخیره می‌شود.</p>
     </div>
 
-    <!-- Add/Edit Form -->
+    <!-- Form -->
     <div class="bg-zinc-900 rounded-3xl p-6 mb-8">
-      <h2 class="text-xl mb-4 font-semibold">افزودن یا ویرایش آیتم</h2>
-      <form id="itemForm" class="grid grid-cols-1 gap-4">
+      <h2 class="text-xl font-semibold mb-6">افزودن / ویرایش آیتم</h2>
+      <form id="itemForm">
         <input type="hidden" id="editId">
-        <input id="name" placeholder="نام آیتم" class="bg-zinc-800 p-4 rounded-2xl" required>
-        <div class="grid grid-cols-2 gap-4">
-          <input id="price" placeholder="قیمت (هزار تومان)" class="bg-zinc-800 p-4 rounded-2xl" required>
-          <input id="category" placeholder="دسته (coffee, tea,...)" class="bg-zinc-800 p-4 rounded-2xl" required>
+        <div class="grid grid-cols-1 gap-4">
+          <input id="name" placeholder="نام آیتم" class="bg-zinc-800 p-4 rounded-2xl" required>
+          <div class="grid grid-cols-2 gap-4">
+            <input id="price" placeholder="قیمت (هزار تومان)" class="bg-zinc-800 p-4 rounded-2xl" required>
+            <input id="category" placeholder="دسته (coffee, tea, pastry, breakfast)" class="bg-zinc-800 p-4 rounded-2xl" required>
+          </div>
+          <input id="desc" placeholder="توضیح کوتاه" class="bg-zinc-800 p-4 rounded-2xl">
+          <input id="emoji" placeholder="ایموجی یا لینک عکس" class="bg-zinc-800 p-4 rounded-2xl">
         </div>
-        <input id="desc" placeholder="توضیح کوتاه" class="bg-zinc-800 p-4 rounded-2xl">
-        <input id="emoji" placeholder="ایموجی یا لینک عکس" class="bg-zinc-800 p-4 rounded-2xl">
-        <button type="submit" class="mt-2 bg-green-600 hover:bg-green-700 py-4 rounded-3xl font-medium">
-          ذخیره آیتم
+
+        <button type="submit" class="mt-8 w-full bg-green-600 hover:bg-green-700 py-4 rounded-3xl font-medium text-lg">
+          ذخیره و آپلود به GitHub
         </button>
       </form>
     </div>
 
+    <div id="status" class="text-center min-h-[28px]"></div>
+
     <!-- List -->
-    <h2 class="text-xl font-semibold mb-4">آیتم‌های منو</h2>
-    <div id="adminList" class="space-y-3"></div>
+    <h2 class="text-xl font-semibold mb-4 mt-10">آیتم‌های فعلی</h2>
+    <div id="adminList" class="space-y-4"></div>
   </div>
 
   <script>
+    const OWNER = "YOUR_GITHUB_USERNAME";   // ← اینجا نام کاربری خودت رو بنویس
+    const REPO = "lumina-cafe-menu";        // ← نام ریپازیتوری
+    const FILE_PATH = "menu-data.json";
+
     let menuItems = [];
 
-    async function loadInitialData() {
+    async function loadMenu() {
       try {
-        const res = await fetch('menu-data.json');
-        menuItems = await res.json();
+        const res = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${FILE_PATH}`);
+        const data = await res.json();
+        menuItems = JSON.parse(atob(data.content));
+        renderList();
       } catch (e) {
-        menuItems = [];
+        console.log("فایل هنوز وجود ندارد یا خطا");
       }
-      renderList();
     }
 
     function renderList() {
       const container = document.getElementById('adminList');
       container.innerHTML = menuItems.map(item => `
-        <div class="bg-zinc-900 rounded-3xl p-5 flex justify-between items-center group">
+        <div class="bg-zinc-900 rounded-3xl p-5 flex justify-between items-center">
           <div>
-            <div class="font-bold text-lg">${item.name}</div>
-            <div class="text-zinc-400">${item.desc || ''} — ${item.price} هزار تومان</div>
+            <div class="font-bold">${item.name}</div>
+            <div class="text-sm text-zinc-400">${item.desc || ''} — ${item.price} هزار تومان</div>
           </div>
-          <div class="flex gap-4 opacity-70 group-hover:opacity-100">
-            <button onclick="editItem(${item.id})" class="text-blue-400 hover:text-blue-300">
-              ✏️
-            </button>
-            <button onclick="deleteItem(${item.id})" class="text-red-400 hover:text-red-300">
-              🗑️
-            </button>
+          <div class="flex gap-4">
+            <button onclick="editItem(${item.id})" class="text-blue-400 hover:text-blue-300">ویرایش</button>
+            <button onclick="deleteItem(${item.id})" class="text-red-400 hover:text-red-300">حذف</button>
           </div>
         </div>
       `).join('');
     }
 
-    document.getElementById('itemForm').addEventListener('submit', (e) => {
+    document.getElementById('itemForm').addEventListener('submit', async (e) => {
       e.preventDefault();
-      const id = document.getElementById('editId').value;
+      const token = document.getElementById('githubToken').value.trim();
 
+      if (!token) return alert("توکن GitHub را وارد کنید!");
+
+      const id = document.getElementById('editId').value;
       const newItem = {
         id: id ? Number(id) : Date.now(),
         name: document.getElementById('name').value,
@@ -102,10 +112,56 @@
         menuItems.push(newItem);
       }
 
-      renderList();
-      e.target.reset();
-      document.getElementById('editId').value = '';
+      const status = document.getElementById('status');
+      status.innerHTML = `<span class="text-amber-400">در حال آپلود به GitHub...</span>`;
+
+      const success = await updateFileOnGitHub(token);
+      if (success) {
+        status.innerHTML = `<span class="text-green-400">✅ با موفقیت آپلود شد!</span>`;
+        renderList();
+        e.target.reset();
+        document.getElementById('editId').value = '';
+      }
     });
+
+    async function updateFileOnGitHub(token) {
+      const content = btoa(unescape(encodeURIComponent(JSON.stringify(menuItems, null, 2))));
+
+      try {
+        // Get current file SHA
+        let sha = null;
+        try {
+          const getRes = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${FILE_PATH}`, {
+            headers: { Authorization: `token ${token}` }
+          });
+          if (getRes.ok) {
+            const file = await getRes.json();
+            sha = file.sha;
+          }
+        } catch (e) {}
+
+        const body = {
+          message: "Update menu via admin panel",
+          content: content,
+          sha: sha
+        };
+
+        const res = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${FILE_PATH}`, {
+          method: "PUT",
+          headers: {
+            "Authorization": `token ${token}`,
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(body)
+        });
+
+        return res.ok;
+      } catch (err) {
+        console.error(err);
+        alert("خطا در ارتباط با GitHub");
+        return false;
+      }
+    }
 
     function editItem(id) {
       const item = menuItems.find(i => i.id === id);
@@ -120,41 +176,14 @@
     }
 
     function deleteItem(id) {
-      if (confirm('حذف شود؟')) {
+      if (confirm("حذف شود؟")) {
         menuItems = menuItems.filter(i => i.id !== id);
         renderList();
       }
     }
 
-    function downloadJSON() {
-      const dataStr = JSON.stringify(menuItems, null, 2);
-      const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
-      const exportFileDefaultName = 'menu-data.json';
-
-      const linkElement = document.createElement('a');
-      linkElement.setAttribute('href', dataUri);
-      linkElement.setAttribute('download', exportFileDefaultName);
-      linkElement.click();
-    }
-
-    function loadJSONFile(event) {
-      const file = event.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        try {
-          menuItems = JSON.parse(e.target.result);
-          renderList();
-          alert('فایل با موفقیت بارگذاری شد!');
-        } catch (err) {
-          alert('فایل معتبر نیست!');
-        }
-      };
-      reader.readAsText(file);
-    }
-
-    // Init
-    loadInitialData();
+    // Load data
+    loadMenu();
   </script>
 </body>
 </html>
