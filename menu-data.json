@@ -1,0 +1,34 @@
+[
+  {
+    "id": 1,
+    "name": "اسپرسو",
+    "category": "coffee",
+    "price": "۹۵",
+    "desc": "قهوه غلیظ و قوی",
+    "emoji": "☕"
+  },
+  {
+    "id": 2,
+    "name": "کاپوچینو",
+    "category": "coffee",
+    "price": "۱۳۵",
+    "desc": "با فوم شیر",
+    "emoji": "☕"
+  },
+  {
+    "id": 3,
+    "name": "لاته زعفرانی",
+    "category": "coffee",
+    "price": "۱۵۵",
+    "desc": "طعم اصیل ایرانی",
+    "emoji": "🥛"
+  },
+  {
+    "id": 4,
+    "name": "کراسان پسته",
+    "category": "pastry",
+    "price": "۱۲۰",
+    "desc": "تازه و ترد",
+    "emoji": "🥐"
+  }
+]
