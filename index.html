@@ -7,12 +7,8 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
   <style>
-    .menu-card {
-      transition: all 0.3s ease;
-    }
-    .menu-card:hover {
-      transform: translateY(-8px);
-    }
+    .menu-card { transition: all 0.3s ease; }
+    .menu-card:hover { transform: translateY(-8px); }
   </style>
 </head>
 <body class="bg-zinc-950 text-white min-h-screen">
@@ -49,12 +45,13 @@
 
     async function loadMenuData() {
       try {
-        const res = await fetch('menu-data.json');
+        // جلوگیری از کش با اضافه کردن timestamp
+        const timestamp = new Date().getTime();
+        const res = await fetch(`menu-data.json?t=${timestamp}`);
         menuItems = await res.json();
         renderMenu(menuItems);
       } catch (err) {
-        console.error("خطا در بارگذاری فایل JSON", err);
-        alert("فایل menu-data.json پیدا نشد!");
+        console.error("خطا در بارگذاری منو:", err);
       }
     }
 
@@ -81,22 +78,19 @@
         document.querySelectorAll('.category-chip')[0].classList.add('active', 'bg-amber-500', 'text-black');
         renderMenu(menuItems);
       } else {
-        const filtered = menuItems.filter(item => item.category === cat);
-        renderMenu(filtered);
+        renderMenu(menuItems.filter(item => item.category === cat));
       }
     }
 
-    // Search
     document.getElementById('searchInput').addEventListener('input', (e) => {
       const term = e.target.value.toLowerCase();
       const filtered = menuItems.filter(item => 
-        item.name.toLowerCase().includes(term) || 
-        item.desc.toLowerCase().includes(term)
+        item.name.toLowerCase().includes(term) || item.desc.toLowerCase().includes(term)
       );
       renderMenu(filtered);
     });
 
-    // Load data
+    // بارگذاری
     loadMenuData();
   </script>
 </body>
