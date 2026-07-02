@@ -10,53 +10,27 @@
   
   <style>
     body { font-family: 'Vazirmatn', system-ui, sans-serif; }
-    .menu-card {
-      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    .menu-card.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-    .menu-card:hover {
-      transform: translateY(-12px);
-      box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.3);
-    }
-    .menu-image {
-      height: 180px;
-      object-fit: cover;
-      transition: transform 0.5s ease;
-    }
-    .menu-card:hover .menu-image {
-      transform: scale(1.08);
-    }
+    .menu-card { transition: all 0.4s ease; }
+    .menu-card.visible { opacity: 1; transform: translateY(0); }
+    .menu-image { height: 180px; object-fit: cover; }
   </style>
 </head>
 <body class="bg-zinc-950 text-white min-h-screen">
   <div class="max-w-md mx-auto bg-zinc-900 min-h-screen">
 
     <div class="sticky top-0 bg-zinc-900 border-b border-zinc-700 z-10">
-      <div class="p-6 flex items-center gap-3 bg-gradient-to-r from-amber-900 to-zinc-900">
-        <i class="fa-solid fa-mug-hot text-4xl text-amber-400"></i>
+      <div class="p-6 flex items-center gap-3">
+        <i class="fa-solid fa-mug-hot text-4xl text-amber-500"></i>
         <h1 class="text-3xl font-bold">لومینا کافه</h1>
       </div>
 
-      <div class="px-6 pb-6 pt-4">
-        <div class="relative">
-          <input id="searchInput" type="text" placeholder="جستجو در منو..." 
-                 class="w-full bg-zinc-800 border border-zinc-700 rounded-3xl py-4 px-6 pl-12 focus:outline-none focus:border-amber-500">
-          <i class="fa-solid fa-magnifying-glass absolute left-6 top-4.5 text-zinc-400"></i>
-        </div>
+      <div class="px-6 pb-6">
+        <input id="searchInput" type="text" placeholder="جستجو..." 
+               class="w-full bg-zinc-800 border border-zinc-700 rounded-3xl py-4 px-6 pl-12 focus:outline-none focus:border-amber-500">
       </div>
 
-      <div class="px-6 pb-4 flex gap-2 overflow-x-auto">
-        <button onclick="filterCategory('all')" class="category-chip active px-7 py-2.5 bg-amber-500 text-black rounded-3xl text-sm font-medium">همه</button>
-        <button onclick="filterCategory('coffee')" class="category-chip px-7 py-2.5 bg-zinc-800 hover:bg-zinc-700 rounded-3xl text-sm font-medium">قهوه</button>
-        <button onclick="filterCategory('tea')" class="category-chip px-7 py-2.5 bg-zinc-800 hover:bg-zinc-700 rounded-3xl text-sm font-medium">چای</button>
-        <button onclick="filterCategory('pastry')" class="category-chip px-7 py-2.5 bg-zinc-800 hover:bg-zinc-700 rounded-3xl text-sm font-medium">شیرینی</button>
-        <button onclick="filterCategory('breakfast')" class="category-chip px-7 py-2.5 bg-zinc-800 hover:bg-zinc-700 rounded-3xl text-sm font-medium">صبحانه</button>
-      </div>
+      <!-- دسته‌بندی پویا -->
+      <div id="categoryContainer" class="px-6 pb-4 flex gap-2 overflow-x-auto"></div>
     </div>
 
     <div id="menuContainer" class="p-6 grid grid-cols-2 gap-5"></div>
@@ -64,25 +38,43 @@
 
   <script>
     let menuItems = [];
+    let allCategories = [];
 
     async function loadMenuData() {
       try {
         const res = await fetch(`menu-data.json?t=${Date.now()}`);
         menuItems = await res.json();
+        renderCategories();
         renderMenu(menuItems);
       } catch (err) {
         console.error(err);
       }
     }
 
-    function renderMenu(items) {
-      const container = document.getElementById('menuContainer');
+    function getCategories() {
+      const cats = new Set(['all']);
+      menuItems.forEach(item => cats.add(item.category));
+      return Array.from(cats);
+    }
+
+    function renderCategories() {
+      allCategories = getCategories();
+      const container = document.getElementById('categoryContainer');
       container.innerHTML = '';
 
-      items.forEach((item, index) => {
-        const card = document.createElement('div');
-        card.className = `menu-card bg-zinc-800 rounded-3xl overflow-hidden`;
-        card.innerHTML = `
+      allCategories.forEach(cat => {
+        const btn = document.createElement('button');
+        btn.className = `category-chip px-7 py-2.5 rounded-3xl text-sm font-medium whitespace-nowrap ${cat === 'all' ? 'active bg-amber-500 text-black' : 'bg-zinc-800 hover:bg-zinc-700'}`;
+        btn.textContent = cat === 'all' ? 'همه' : cat.charAt(0).toUpperCase() + cat.slice(1);
+        btn.onclick = () => filterCategory(cat);
+        container.appendChild(btn);
+      });
+    }
+
+    function renderMenu(items) {
+      const container = document.getElementById('menuContainer');
+      container.innerHTML = items.map((item, index) => `
+        <div class="menu-card bg-zinc-800 rounded-3xl overflow-hidden" style="animation-delay: ${index*80}ms">
           <div class="relative">
             ${item.image ? 
               `<img src="${item.image}" class="menu-image w-full">` : 
@@ -94,21 +86,23 @@
             <p class="text-zinc-400 text-sm mt-1">${item.desc || ''}</p>
             <p class="text-amber-400 font-bold mt-3">${item.price} هزار تومان</p>
           </div>
-        `;
-        container.appendChild(card);
-        
-        setTimeout(() => card.classList.add('visible'), 50 + index * 80);
-      });
+        </div>
+      `).join('');
     }
 
     function filterCategory(cat) {
-      document.querySelectorAll('.category-chip').forEach(btn => btn.classList.remove('active', 'bg-amber-500', 'text-black'));
-      if (cat === 'all') {
-        document.querySelectorAll('.category-chip')[0].classList.add('active', 'bg-amber-500', 'text-black');
-        renderMenu(menuItems);
-      } else {
-        renderMenu(menuItems.filter(item => item.category === cat));
+      document.querySelectorAll('.category-chip').forEach(b => b.classList.remove('active', 'bg-amber-500', 'text-black'));
+      
+      const buttons = document.querySelectorAll('.category-chip');
+      for (let btn of buttons) {
+        if ((cat === 'all' && btn.textContent === 'همه') || btn.textContent.toLowerCase() === cat) {
+          btn.classList.add('active', 'bg-amber-500', 'text-black');
+          break;
+        }
       }
+
+      const filtered = cat === 'all' ? menuItems : menuItems.filter(item => item.category === cat);
+      renderMenu(filtered);
     }
 
     document.getElementById('searchInput').addEventListener('input', (e) => {
