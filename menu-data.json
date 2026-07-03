@@ -10,5 +10,17 @@
     "popular": false,
     "image": "images/1783112536333-espresso.jpg",
     "emoji": "☕"
+  },
+  {
+    "id": 1783113904431,
+    "name": "آمریکانو",
+    "price": "-",
+    "category": "بار گرم",
+    "desc": "",
+    "rating": null,
+    "discount": 0,
+    "popular": false,
+    "image": "images/1783113902163-americano.jpg",
+    "emoji": "☕"
   }
 ]
