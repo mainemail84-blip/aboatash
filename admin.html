@@ -10,29 +10,28 @@
 <body class="bg-zinc-950 text-white">
   <div class="max-w-2xl mx-auto p-6">
 
-    <div class="flex justify-between mb-8">
+    <div class="flex justify-between items-center mb-8">
       <h1 class="text-3xl font-bold">پنل مدیریت</h1>
       <a href="index.html" class="text-amber-400 hover:underline">← منوی مشتری</a>
     </div>
 
     <div class="bg-zinc-900 rounded-3xl p-6 mb-8">
-      <label class="block mb-2">Token</label>
+      <label class="block mb-2">GitHub Token</label>
       <input type="password" id="githubToken" placeholder="ghp_..." class="w-full bg-zinc-800 p-4 rounded-2xl">
     </div>
 
     <div class="bg-zinc-900 rounded-3xl p-6">
-      <h2 class="text-xl mb-6">افزودن آیتم جدید</h2>
+      <h2 class="text-xl mb-6">افزودن آیتم</h2>
       <form id="itemForm">
         <input id="name" placeholder="نام آیتم" class="w-full bg-zinc-800 p-4 rounded-2xl mb-4" required>
         
         <div class="grid grid-cols-2 gap-4 mb-4">
           <input id="price" placeholder="قیمت" class="bg-zinc-800 p-4 rounded-2xl" required>
-          <input id="category" placeholder="دسته" class="bg-zinc-800 p-4 rounded-2xl" required>
+          <input id="category" placeholder="دسته‌بندی" class="bg-zinc-800 p-4 rounded-2xl" required>
         </div>
 
-        <input id="desc" placeholder="توضیح" class="w-full bg-zinc-800 p-4 rounded-2xl mb-6">
+        <input id="desc" placeholder="توضیح کوتاه" class="w-full bg-zinc-800 p-4 rounded-2xl mb-6">
 
-        <!-- انتخاب و آپلود عکس -->
         <div class="mb-6">
           <label class="block text-sm mb-2">عکس آیتم</label>
           <input type="file" id="imageFile" accept="image/*" class="block w-full text-sm text-zinc-300 file:mr-4 file:py-3 file:px-6 file:rounded-2xl file:bg-amber-600 file:text-white">
@@ -49,11 +48,13 @@
   </div>
 
   <script>
-    const OWNER = "mainemail84-blip";   // تغییر بده
+    const OWNER = "mainemail84-blip";
     const REPO = "aboatash";
 
+    let menuItems = [];
     let selectedFile = null;
 
+    // پیش‌نمایش
     document.getElementById('imageFile').addEventListener('change', function(e) {
       selectedFile = e.target.files[0];
       if (selectedFile) {
@@ -72,23 +73,22 @@
       if (!token) return alert("توکن را وارد کنید!");
 
       const status = document.getElementById('status');
-      status.innerHTML = "در حال آپلود عکس و اطلاعات...";
+      status.innerHTML = "در حال آپلود...";
 
       let imagePath = null;
 
       if (selectedFile) {
-        // آپلود عکس به پوشه images
-        const fileName = Date.now() + '-' + selectedFile.name.replace(/\s+/g, '-');
+        const fileName = Date.now() + '-' + selectedFile.name.replace(/\s+/g, '-').toLowerCase();
         imagePath = `images/${fileName}`;
 
-        const success = await uploadImageToGitHub(selectedFile, fileName, token);
-        if (!success) {
+        const uploaded = await uploadImage(selectedFile, fileName, token);
+        if (!uploaded) {
           status.innerHTML = "خطا در آپلود عکس";
           return;
         }
       }
 
-      // ذخیره آیتم
+      // ایجاد آیتم جدید
       const newItem = {
         id: Date.now(),
         name: document.getElementById('name').value,
@@ -99,11 +99,27 @@
         emoji: "☕"
       };
 
-      // اینجا باید menuItems رو لود کنی و اضافه کنی و آپلود کنی (کد کامل‌تر نیاز داره)
-      alert("عکس آپلود شد! (برای کامل شدن کد menuItems رو مدیریت کن)");
+      // لود داده‌های فعلی + اضافه کردن آیتم جدید
+      try {
+        const res = await fetch(`menu-data.json?t=${Date.now()}`);
+        menuItems = await res.json();
+      } catch (e) {
+        menuItems = [];
+      }
+
+      menuItems.push(newItem);
+
+      // آپلود menu-data.json
+      const saved = await saveMenuData(token);
+      if (saved) {
+        status.innerHTML = `<span class="text-green-400">✅ آیتم با موفقیت اضافه شد</span>`;
+        e.target.reset();
+        selectedFile = null;
+        document.getElementById('preview').classList.add('hidden');
+      }
     });
 
-    async function uploadImageToGitHub(file, fileName, token) {
+    async function uploadImage(file, fileName, token) {
       const reader = new FileReader();
       return new Promise((resolve) => {
         reader.onload = async function(e) {
@@ -128,6 +144,28 @@
         };
         reader.readAsDataURL(file);
       });
+    }
+
+    async function saveMenuData(token) {
+      try {
+        const content = btoa(unescape(encodeURIComponent(JSON.stringify(menuItems, null, 2))));
+        let sha = null;
+        try {
+          const r = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/menu-data.json`, {
+            headers: { Authorization: `token ${token}` }
+          });
+          if (r.ok) sha = (await r.json()).sha;
+        } catch(e) {}
+        await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/menu-data.json`, {
+          method: 'PUT',
+          headers: { Authorization: `token ${token}`, "Content-Type": "application/json" },
+          body: JSON.stringify({ message: "Update menu", content, sha })
+        });
+        return true;
+      } catch (err) {
+        console.error(err);
+        return false;
+      }
     }
   </script>
 </body>
