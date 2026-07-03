@@ -41,10 +41,10 @@
     "price": "-",
     "category": "بار سرد",
     "desc": "",
-    "rating": null,
+    "rating": 3,
     "discount": 0,
     "popular": false,
-    "image": "images/1783114485939-iced_mocha-1.jpg",
+    "image": "images/1783114576519-iced_mocha-1.jpg",
     "emoji": "☕"
   }
 ]
