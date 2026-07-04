@@ -73,7 +73,6 @@
   }
   ::-webkit-scrollbar{display:none;}
   * {scrollbar-width:none;}
-
   /* Header */
   .topbar{
     position:sticky; top:0; z-index:30;
@@ -115,7 +114,6 @@
   .search-box input:focus{border-color:var(--accent); box-shadow:0 0 0 4px rgba(217,164,65,.15);}
   .search-box i{position:absolute; right:16px; top:50%; transform:translateY(-50%); color:var(--dim); transition:color .25s ease;}
   .search-box input:focus + i{color:var(--accent);}
-
   .tabs-row{display:flex; gap:6px; padding:0 18px 14px;}
   .tab-pill{
     flex:1; text-align:center; padding:9px 0; border-radius:14px; font-size:13px; font-weight:600;
@@ -124,10 +122,8 @@
   }
   .tab-pill:active{transform:scale(.96);}
   .tab-pill.active{background:var(--accent); color:#1a1209; animation:popIn .3s ease;}
-
   .view{display:none; padding:0 18px 6px;}
   .view.active{display:block; animation:fadeIn .35s ease;}
-
   /* HERO */
   .hero{
     margin-top:14px; border-radius:22px; padding:26px 20px; position:relative; overflow:hidden;
@@ -149,11 +145,9 @@
   }
   .hero-btn:hover{transform:translateY(-2px); box-shadow:0 8px 18px rgba(217,164,65,.3);}
   .hero-btn:active{transform:translateY(0) scale(.97);}
-
   .section-title{display:flex; align-items:center; justify-content:space-between; margin:26px 0 14px; animation:fadeInUp .5s ease both; animation-delay:.05s;}
   .section-title h3{font-size:16px; margin:0; display:flex; align-items:center; gap:8px;}
   .section-title .see-all{font-size:12px; color:var(--accent); cursor:pointer;}
-
   /* Special offer card */
   .offer-card{
     display:flex; gap:14px; background:var(--bg-card); border:1px solid var(--border); border-radius:20px;
@@ -176,7 +170,6 @@
   .price-row{display:flex; align-items:baseline; gap:8px;}
   .price-old{color:var(--dim); font-size:12px; text-decoration:line-through;}
   .price-new{color:var(--accent); font-weight:800; font-size:14.5px;}
-
   /* Popular horizontal scroll */
   .h-scroll{display:flex; gap:14px; overflow-x:auto; padding-bottom:6px; margin:0 -18px; padding-inline:18px;}
   .pop-card{
@@ -195,7 +188,6 @@
   .pop-card .rating{font-size:11px; color:var(--dim); display:flex; align-items:center; gap:4px;}
   .pop-card .rating i{color:var(--accent);}
   .pop-card .price{color:var(--accent); font-weight:700; font-size:12.5px; margin-top:5px;}
-
   /* Category accordion (menu tab) */
   .cat-block{
     background:var(--bg-card); border:1px solid var(--border); border-radius:18px; margin-bottom:10px; overflow:hidden;
@@ -232,10 +224,8 @@
   .item-row .price{color:var(--accent); font-weight:700; font-size:13px;}
   .item-row .rating{font-size:11px; color:var(--dim); display:flex; align-items:center; gap:3px;}
   .item-row .rating i{color:var(--accent);}
-
   .empty-state{text-align:center; padding:50px 20px; color:var(--dim);}
   .empty-state i{font-size:34px; margin-bottom:12px; color:var(--accent-dark);}
-
   .skeleton{
     background:linear-gradient(90deg, var(--bg-card) 25%, var(--bg-card-2) 37%, var(--bg-card) 63%);
     background-size:400px 100%; animation:shimmer 1.4s ease infinite; border:1px solid var(--border);
@@ -243,19 +233,6 @@
   .skel-offer{height:112px; border-radius:20px;}
   .skel-pop{flex:0 0 150px; height:180px; border-radius:18px;}
   .skel-cat{height:68px; border-radius:18px; margin-bottom:10px;}
-
-  /* Waiter FAB (menu tab) */
-  .waiter-btn{
-    display:flex; align-items:center; justify-content:center; gap:9px; width:100%;
-    background:linear-gradient(90deg,var(--accent),var(--accent-2)); color:#1a1209; font-weight:800; font-size:14px;
-    padding:14px; border-radius:16px; border:none; margin:20px 0 6px; cursor:pointer;
-    box-shadow:0 8px 22px rgba(217,164,65,.25);
-    animation:fadeInUp .5s ease both, pulseGlow 3s ease-in-out 1s infinite;
-    transition:transform .2s ease;
-  }
-  .waiter-btn:hover{transform:translateY(-2px);}
-  .waiter-btn:active{transform:translateY(0) scale(.97); animation:fadeInUp .5s ease both;}
-
   /* Bottom nav */
   .bottom-nav{
     position:fixed; bottom:0; left:50%; transform:translateX(-50%); width:100%; max-width:430px;
@@ -271,7 +248,6 @@
   .nav-item:active{transform:scale(.92);}
   .nav-item.active{color:var(--accent);}
   .nav-item.active i{animation:bounceIn .4s ease;}
-
   /* generic placeholder views */
   .placeholder-box{
     background:var(--bg-card); border:1px solid var(--border); border-radius:18px; padding:30px 20px; text-align:center; margin-top:16px;
@@ -279,7 +255,6 @@
   .placeholder-box i{font-size:32px; color:var(--accent); margin-bottom:10px;}
   .placeholder-box h4{margin:0 0 6px; font-size:15px;}
   .placeholder-box p{margin:0; color:var(--dim); font-size:12.5px; line-height:1.9;}
-
   .toast{
     position:fixed; bottom:100px; left:50%; transform:translateX(-50%) translateY(20px) scale(.95); opacity:0;
     background:var(--bg-card-2); border:1px solid var(--accent); color:var(--text); padding:11px 20px; border-radius:14px;
@@ -290,7 +265,6 @@
 </head>
 <body>
 <div class="app">
-
   <!-- Header -->
   <div class="topbar">
     <div class="topbar-row">
@@ -298,7 +272,6 @@
         <div class="brand-icon"><i class="fa-solid fa-mug-hot"></i></div>
         <div class="brand-title" id="cafeName">آب و آتش</div>
       </div>
-
     </div>
     <div class="search-wrap">
       <div class="search-box">
@@ -319,12 +292,10 @@
       <h2 id="heroTitle">به کافه ما خوش آمدید</h2>
       <p id="heroSub">لذت نوشیدنی‌های خاص و لحظات خوشمزه</p>
     </div>
-
     <div class="section-title">
       <h3><i class="fa-solid fa-star" style="color:var(--accent);"></i> <span id="offerTitle">پیشنهاد ویژه</span></h3>
     </div>
     <div id="offerContainer"></div>
-
     <div class="section-title">
       <h3><i class="fa-solid fa-fire" style="color:var(--accent);"></i> <span id="popularTitle">محبوب‌ترین‌ها</span></h3>
     </div>
@@ -361,12 +332,16 @@
       <i class="fa-solid fa-circle-info"></i><span>اطلاعات</span>
     </button>
   </div>
-
   <div class="toast" id="toast"></div>
 </div>
 
 <script>
 let menuItems = [];
+
+function isValidPrice(price) {
+  const num = Number(price);
+  return !isNaN(num) && num > 0;
+}
 
 function showSkeletons(){
   document.getElementById('offerContainer').innerHTML = `<div class="skeleton skel-offer"></div>`;
@@ -391,12 +366,15 @@ function fmtPrice(p){
   const n = Number(p) || 0;
   return n.toLocaleString('en-US');
 }
+
 function seedNum(id, min, max){
   const s = Number(id) % 1000;
   return min + (s % (max - min));
 }
+
 function getRating(item){ return item.rating || 4.5; }
 function getReviews(item){ return item.reviews || seedNum(item.id, 20, 140); }
+
 function categoryIcon(cat){
   cat = cat || '';
   if(/گرم|hot/i.test(cat)) return 'fa-mug-hot';
@@ -407,7 +385,8 @@ function categoryIcon(cat){
   if(/ویژه|پیشنهاد|special/i.test(cat)) return 'fa-star';
   return 'fa-mug-hot';
 }
-function imgOrEmoji(item, cls){
+
+function imgOrEmoji(item){
   if(item.image){
     return `<div class="img"><img src="${item.image}" alt="${item.name}"></div>`;
   }
@@ -415,14 +394,22 @@ function imgOrEmoji(item, cls){
 }
 
 function renderHome(){
-  // Special offer: item with highest discount, else first item
   const offerItem = [...menuItems].sort((a,b) => (b.discount||0)-(a.discount||0))[0];
   const offerC = document.getElementById('offerContainer');
+  
   if(!offerItem){
     offerC.innerHTML = `<div class="empty-state"><i class="fa-solid fa-mug-hot"></i><div>هنوز آیتمی ثبت نشده</div></div>`;
   } else {
     const disc = offerItem.discount || 0;
-    const newPrice = disc > 0 ? Math.round(Number(offerItem.price) * (1 - disc/100)) : Number(offerItem.price);
+    let priceHTML = '';
+    if (isValidPrice(offerItem.price)) {
+      const newPrice = disc > 0 ? Math.round(Number(offerItem.price) * (1 - disc/100)) : Number(offerItem.price);
+      priceHTML = `
+        <div class="price-row">
+          ${disc > 0 ? `<span class="price-old">${fmtPrice(offerItem.price)} تومان</span>` : ''}
+          <span class="price-new">${fmtPrice(newPrice)} تومان</span>
+        </div>`;
+    }
     offerC.innerHTML = `
       <div class="offer-card">
         ${disc > 0 ? `<div class="offer-badge">٪${disc} تخفیف</div>` : ''}
@@ -430,22 +417,24 @@ function renderHome(){
         <div style="flex:1;">
           <div class="name">${offerItem.name}</div>
           <div class="desc">${offerItem.desc || offerItem.category}</div>
-          <div class="price-row">
-            ${disc > 0 ? `<span class="price-old">${fmtPrice(offerItem.price)} تومان</span>` : ''}
-            <span class="price-new">${fmtPrice(newPrice)} تومان</span>
-          </div>
+          ${priceHTML}
         </div>
       </div>`;
   }
 
-  // Popular
   let pop = menuItems.filter(i => i.popular);
   if(pop.length === 0) pop = [...menuItems].sort((a,b)=>getRating(b)-getRating(a)).slice(0,6);
   const popC = document.getElementById('popularContainer');
+  
   if(pop.length === 0){
     popC.innerHTML = `<div class="empty-state" style="width:100%;"><i class="fa-solid fa-fire"></i><div>آیتم محبوبی نیست</div></div>`;
   } else {
-    popC.innerHTML = pop.map((item, idx) => `
+    popC.innerHTML = pop.map((item, idx) => {
+      let priceHTML = '';
+      if (isValidPrice(item.price)) {
+        priceHTML = `<div class="price">${fmtPrice(item.price)} تومان</div>`;
+      }
+      return `
       <div class="pop-card" style="animation-delay:${.15 + idx*0.07}s">
         <div class="img">
           ${item.image ? `<img src="${item.image}" alt="${item.name}">` : `<div class="emoji-ph">${item.emoji || '☕'}</div>`}
@@ -454,14 +443,15 @@ function renderHome(){
         <div class="info">
           <div class="name">${item.name}</div>
           <div class="rating"><i class="fa-solid fa-star"></i> ${getRating(item)} (${getReviews(item)})</div>
-          <div class="price">${fmtPrice(item.price)} تومان</div>
+          ${priceHTML}
         </div>
-      </div>
-    `).join('');
+      </div>`;
+    }).join('');
   }
 }
 
 let openCategory = null;
+
 function renderMenu(filterTerm){
   const container = document.getElementById('categoriesContainer');
   let items = menuItems;
@@ -476,8 +466,6 @@ function renderMenu(filterTerm){
   const cats = [];
   items.forEach(i => { if(!cats.includes(i.category)) cats.push(i.category); });
 
-  if(filterTerm && openCategory === null) { /* keep all open while searching */ }
-
   container.innerHTML = cats.map((cat, ci) => {
     const catItems = items.filter(i => i.category === cat);
     const isOpen = filterTerm ? true : (openCategory === cat);
@@ -490,19 +478,25 @@ function renderMenu(filterTerm){
         <i class="fa-solid fa-chevron-down chev"></i>
       </div>
       <div class="cat-items">
-        ${catItems.map((item, ii) => `
+        ${catItems.map((item, ii) => {
+          let priceHTML = '';
+          if (isValidPrice(item.price)) {
+            priceHTML = `<span class="price">${fmtPrice(item.price)} تومان</span>`;
+          }
+          return `
           <div class="item-row" style="animation-delay:${.05 + ii*0.05}s">
             ${imgOrEmoji(item)}
             <div class="info">
               <div class="name">${item.name}</div>
               <div class="desc">${item.desc || ''}</div>
               <div class="bottom-line">
-                <span class="price">${fmtPrice(item.price)} تومان</span>
+                ${priceHTML}
+                ${priceHTML ? '<span style="flex:1;"></span>' : ''}
                 <span class="rating"><i class="fa-solid fa-star"></i> ${getRating(item)} (${getReviews(item)})</span>
               </div>
             </div>
-          </div>
-        `).join('')}
+          </div>`;
+        }).join('')}
       </div>
     </div>`;
   }).join('');
@@ -516,7 +510,7 @@ function toggleCategory(cat){
 function switchTab(tab){
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
   const target = document.getElementById(`view-${tab}`);
-  void target.offsetWidth; // restart entrance animation
+  void target.offsetWidth;
   target.classList.add('active');
   document.querySelectorAll('.tab-pill').forEach(b => b.classList.remove('active'));
   const pillBtn = document.querySelector(`.tab-pill[data-tab="${tab}"]`);
@@ -530,10 +524,6 @@ function switchTab(tab){
   tabsRow.style.display = (tab === 'home' || tab === 'menu') ? 'flex' : 'none';
 }
 
-function callWaiter(){
-  addToast('درخواست شما برای کارمند ارسال شد 🔔');
-}
-
 let toastTimer;
 function addToast(message){
   const t = document.getElementById('toast');
@@ -545,10 +535,7 @@ function addToast(message){
 
 document.getElementById('searchInput').addEventListener('input', (e) => {
   const term = e.target.value;
-  if(term){
-    switchTab('menu');
-    document.querySelector('.tab-pill[data-tab="menu"]').click;
-  }
+  if(term) switchTab('menu');
   renderMenu(term);
 });
 
