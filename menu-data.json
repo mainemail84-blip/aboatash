@@ -82,5 +82,17 @@
     "popular": false,
     "image": "images/1783184218198-padtaalferedo.jpeg",
     "emoji": "☕"
+  },
+  {
+    "id": 1783184343808,
+    "name": "سالار سزار",
+    "price": "-",
+    "category": "سالاد",
+    "desc": "",
+    "rating": null,
+    "discount": 0,
+    "popular": false,
+    "image": "images/1783184341487-casear-salad.jpg",
+    "emoji": "☕"
   }
 ]
