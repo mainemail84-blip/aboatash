@@ -31,9 +31,13 @@
 <input id="name" placeholder="نام آیتم" class="w-full bg-zinc-800 p-4 rounded-2xl mb-4" required>
 <div class="grid grid-cols-2 gap-4 mb-4">
 <input id="price" placeholder="قیمت (تومان)" class="bg-zinc-800 p-4 rounded-2xl" required>
-<input id="category" list="categoryList" placeholder="دسته‌بندی (جدید یا موجود)" class="bg-zinc-800 p-4 rounded-2xl" required>
-<datalist id="categoryList"></datalist>
+<select id="categorySelect" class="bg-zinc-800 p-4 rounded-2xl" required>
+  <option value="">دسته‌بندی را انتخاب کنید</option>
+  <option value="__new__">➕ دسته‌بندی جدید</option>
+</select>
 </div>
+<input id="newCategoryInput" placeholder="نام دسته‌بندی جدید را بنویسید" class="hidden w-full bg-zinc-800 p-4 rounded-2xl mb-4">
+
 <input id="desc" placeholder="توضیح" class="w-full bg-zinc-800 p-4 rounded-2xl mb-4">
 <div class="grid grid-cols-3 gap-4 mb-4">
 <div>
@@ -78,6 +82,26 @@ const REPO = "aboatashmenu";
 let menuItems = [];
 let selectedFile = null;
 
+document.getElementById('categorySelect').addEventListener('change', function(e) {
+  const newInput = document.getElementById('newCategoryInput');
+  if (e.target.value === '__new__') {
+    newInput.classList.remove('hidden');
+    newInput.value = '';
+    newInput.focus();
+  } else {
+    newInput.classList.add('hidden');
+  }
+});
+
+// مقدار نهایی دسته‌بندی را از دراپ‌داون یا فیلد دسته جدید برمی‌گرداند
+function getSelectedCategory() {
+  const select = document.getElementById('categorySelect');
+  if (select.value === '__new__') {
+    return document.getElementById('newCategoryInput').value.trim();
+  }
+  return select.value;
+}
+
 document.getElementById('imageFile').addEventListener('change', function(e) {
   selectedFile = e.target.files[0];
   if (selectedFile) {
@@ -97,6 +121,12 @@ document.getElementById('itemForm').addEventListener('submit', async (e) => {
 
   const status = document.getElementById('status');
   status.innerHTML = "در حال آپلود...";
+
+  const categoryValue = getSelectedCategory();
+  if (!categoryValue) {
+    alert('لطفاً یک دسته‌بندی انتخاب کنید یا نام دسته‌بندی جدید را بنویسید');
+    return;
+  }
 
   let imagePath = null;
   const editId = document.getElementById('editId').value;
@@ -126,7 +156,7 @@ document.getElementById('itemForm').addEventListener('submit', async (e) => {
     id: editId ? Number(editId) : Date.now(),
     name: document.getElementById('name').value,
     price: document.getElementById('price').value,
-    category: document.getElementById('category').value.trim(),
+    category: categoryValue,
     desc: document.getElementById('desc').value,
     rating: document.getElementById('rating').value ? Number(document.getElementById('rating').value) : (existing?.rating || null),
     discount: document.getElementById('discount').value ? Number(document.getElementById('discount').value) : 0,
@@ -157,7 +187,24 @@ function cancelEdit() {
   document.getElementById('formTitle').innerText = 'افزودن / ویرایش آیتم';
   document.getElementById('cancelBtn').classList.add('hidden');
   document.getElementById('preview').classList.add('hidden');
+  document.getElementById('newCategoryInput').classList.add('hidden');
   selectedFile = null;
+}
+
+// از پیش انتخاب‌کردن یک دسته‌بندی هنگام افزودن آیتم مستقیم از داخل آن بخش
+function startAddItemInCategory(cat) {
+  cancelEdit();
+  const select = document.getElementById('categorySelect');
+  const exists = [...select.options].some(o => o.value === cat);
+  if (exists) {
+    select.value = cat;
+  } else {
+    select.value = '__new__';
+    document.getElementById('newCategoryInput').classList.remove('hidden');
+    document.getElementById('newCategoryInput').value = cat;
+  }
+  document.getElementById('name').focus();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 async function uploadImage(file, fileName, token) {
@@ -247,13 +294,28 @@ function escapeHtml(str) {
   }[m]));
 }
 
-// به‌روزرسانی لیست پیشنهادی دسته‌بندی‌ها برای فیلد ورودی
+// به‌روزرسانی دراپ‌داون دسته‌بندی‌ها بر اساس دسته‌های موجود در دیتا
 function updateCategoryList() {
   const cats = [...new Set(menuItems.map(i => i.category).filter(Boolean))];
-  document.getElementById('categoryList').innerHTML = cats.map(c => `<option value="${escapeHtml(c)}">`).join('');
+  const select = document.getElementById('categorySelect');
+  const currentValue = select.value;
+  select.innerHTML = `<option value="">دسته‌بندی را انتخاب کنید</option>` +
+    cats.map(c => `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join('') +
+    `<option value="__new__">➕ دسته‌بندی جدید</option>`;
+  if (cats.includes(currentValue) || currentValue === '__new__') {
+    select.value = currentValue;
+  }
 }
 
-// نمایش آیتم‌ها گروه‌بندی‌شده بر اساس دسته (بر اساس ترتیب اولین ظهور در دیتا)
+// وضعیت باز/بسته‌بودن هر دسته را نگه می‌دارد (کلید = نام دسته)
+const categoryOpenState = {};
+
+function toggleCategory(catKey) {
+  categoryOpenState[catKey] = !categoryOpenState[catKey];
+  renderList();
+}
+
+// نمایش آیتم‌ها به‌صورت آکاردئون کشویی بر اساس دسته (بر اساس ترتیب اولین ظهور در دیتا)
 function renderList() {
   const container = document.getElementById('adminList');
   document.getElementById('itemCount').innerText = menuItems.length;
@@ -270,8 +332,12 @@ function renderList() {
     if (!categoryOrder.includes(cat)) categoryOrder.push(cat);
   });
 
-  const sections = categoryOrder.map(cat => {
+  const sections = categoryOrder.map((cat, idx) => {
     const catItems = menuItems.filter(i => (i.category || 'بدون دسته') === cat);
+    const catKey = cat;
+    // به‌صورت پیش‌فرض فقط اولین دسته باز است
+    if (!(catKey in categoryOpenState)) categoryOpenState[catKey] = idx === 0;
+    const isOpen = categoryOpenState[catKey];
 
     const itemsHtml = catItems.map(item => `
       <div class="bg-zinc-900 p-5 rounded-3xl flex gap-4">
@@ -292,9 +358,15 @@ function renderList() {
     `).join('');
 
     return `
-      <div>
-        <h3 class="text-lg font-semibold mb-3 border-b border-zinc-800 pb-2">${escapeHtml(cat)} <span class="text-zinc-500 text-sm">(${catItems.length})</span></h3>
-        <div class="space-y-4">${itemsHtml}</div>
+      <div class="bg-zinc-900/50 rounded-3xl overflow-hidden border border-zinc-800">
+        <button type="button" onclick="toggleCategory('${escapeHtml(catKey).replace(/'/g, "\\'")}')" class="w-full flex items-center justify-between p-5 text-right">
+          <span class="text-lg font-semibold flex items-center gap-2">
+            <i class="fa-solid fa-chevron-${isOpen ? 'down' : 'left'} text-zinc-500 text-sm"></i>
+            ${escapeHtml(cat)} <span class="text-zinc-500 text-sm">(${catItems.length})</span>
+          </span>
+          <span onclick="event.stopPropagation(); startAddItemInCategory('${escapeHtml(catKey).replace(/'/g, "\\'")}')" class="text-sm bg-amber-600 hover:bg-amber-500 px-4 py-2 rounded-full">➕ افزودن آیتم</span>
+        </button>
+        ${isOpen ? `<div class="p-5 pt-0 space-y-4">${itemsHtml}</div>` : ''}
       </div>
     `;
   }).join('');
@@ -308,7 +380,17 @@ function editItem(id) {
     document.getElementById('editId').value = item.id;
     document.getElementById('name').value = item.name;
     document.getElementById('price').value = item.price;
-    document.getElementById('category').value = item.category;
+    const select = document.getElementById('categorySelect');
+    const exists = [...select.options].some(o => o.value === item.category);
+    const newInput = document.getElementById('newCategoryInput');
+    if (exists) {
+      select.value = item.category;
+      newInput.classList.add('hidden');
+    } else {
+      select.value = '__new__';
+      newInput.classList.remove('hidden');
+      newInput.value = item.category || '';
+    }
     document.getElementById('desc').value = item.desc || '';
     document.getElementById('rating').value = item.rating || '';
     document.getElementById('discount').value = item.discount || '';
