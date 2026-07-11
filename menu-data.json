@@ -238,5 +238,17 @@
     "popular": false,
     "image": "images/1783775753595-macchiato.jpg",
     "emoji": "☕"
+  },
+  {
+    "id": 1783775928713,
+    "name": "چای سبز",
+    "price": "-",
+    "category": "چای و دمنوش",
+    "desc": "",
+    "rating": null,
+    "discount": 0,
+    "popular": false,
+    "image": "images/1783775925519-green-tea-properties.jpg",
+    "emoji": "☕"
   }
 ]
