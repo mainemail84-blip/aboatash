@@ -274,5 +274,17 @@
     "popular": false,
     "image": "images/1783776058570-دارچین.jpeg",
     "emoji": "☕"
+  },
+  {
+    "id": 1783776130951,
+    "name": "چای ماسالا",
+    "price": "-",
+    "category": "چای و دمنوش",
+    "desc": "",
+    "rating": null,
+    "discount": 0,
+    "popular": false,
+    "image": "images/1783776129319-ماسالا.jpeg",
+    "emoji": "☕"
   }
 ]
