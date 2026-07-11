@@ -490,5 +490,17 @@
     "popular": false,
     "image": "images/1783780607574-لیموناد.jpg",
     "emoji": "☕"
+  },
+  {
+    "id": 1783780689501,
+    "name": "موهیتو",
+    "price": "-",
+    "category": "بار سرد و نوشیدنی",
+    "desc": "",
+    "rating": null,
+    "discount": 0,
+    "popular": false,
+    "image": "images/1783780687735-موهیتو.jpg",
+    "emoji": "☕"
   }
 ]
