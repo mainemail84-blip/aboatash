@@ -526,5 +526,17 @@
     "popular": false,
     "image": "images/1783780854541-بلوموهیتو.jpg",
     "emoji": "☕"
+  },
+  {
+    "id": 1783781012494,
+    "name": "شیک نوتلا",
+    "price": "-",
+    "category": "بستنی و شیک",
+    "desc": "",
+    "rating": null,
+    "discount": 0,
+    "popular": false,
+    "image": "images/1783781010239-شیک-شکلات.jpg",
+    "emoji": "☕"
   }
 ]
