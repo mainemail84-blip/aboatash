@@ -346,5 +346,17 @@
     "popular": false,
     "image": "images/1783779143377-ایس-کارامل-ماکیاتو-1.png",
     "emoji": "☕"
+  },
+  {
+    "id": 1783779298032,
+    "name": "آیس لته",
+    "price": "-",
+    "category": "بار سرد و نوشیدنی",
+    "desc": "",
+    "rating": null,
+    "discount": 0,
+    "popular": false,
+    "image": "images/1783779295236-ایس-لته.jpg",
+    "emoji": "☕"
   }
 ]
