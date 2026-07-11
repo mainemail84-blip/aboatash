@@ -562,5 +562,17 @@
     "popular": false,
     "image": "images/1783781341216-وانیل.jpg",
     "emoji": "☕"
+  },
+  {
+    "id": 1783781413940,
+    "name": "شیک موز",
+    "price": "-",
+    "category": "بستنی و شیک",
+    "desc": "",
+    "rating": null,
+    "discount": 0,
+    "popular": false,
+    "image": "images/1783781411981-شیکموز.jpeg",
+    "emoji": "☕"
   }
 ]
