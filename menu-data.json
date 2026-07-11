@@ -262,5 +262,17 @@
     "popular": false,
     "image": "images/1783775996884-torsh.jpeg",
     "emoji": "☕"
+  },
+  {
+    "id": 1783776060602,
+    "name": "چای دارچین",
+    "price": "-",
+    "category": "چای و دمنوش",
+    "desc": "",
+    "rating": null,
+    "discount": 0,
+    "popular": false,
+    "image": "images/1783776058570-دارچین.jpeg",
+    "emoji": "☕"
   }
 ]
