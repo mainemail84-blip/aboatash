@@ -298,5 +298,17 @@
     "popular": false,
     "image": "images/1783776219090-875827_918.jpg",
     "emoji": "☕"
+  },
+  {
+    "id": 1783776281702,
+    "name": "انواع دمنوش",
+    "price": "-",
+    "category": "چای و دمنوش",
+    "desc": "",
+    "rating": null,
+    "discount": 0,
+    "popular": false,
+    "image": "images/1783776279248-دمنوش.jpeg",
+    "emoji": "☕"
   }
 ]
