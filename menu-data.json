@@ -250,5 +250,17 @@
     "popular": false,
     "image": "images/1783775925519-green-tea-properties.jpg",
     "emoji": "☕"
+  },
+  {
+    "id": 1783775999809,
+    "name": "چای ترش",
+    "price": "-",
+    "category": "چای و دمنوش",
+    "desc": "",
+    "rating": null,
+    "discount": 0,
+    "popular": false,
+    "image": "images/1783775996884-torsh.jpeg",
+    "emoji": "☕"
   }
 ]
