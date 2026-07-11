@@ -574,29 +574,5 @@
     "popular": false,
     "image": "images/1783781411981-شیکموز.jpeg",
     "emoji": "☕"
-  },
-  {
-    "id": 1783781592138,
-    "name": "شیک قهوه",
-    "price": "-",
-    "category": "بار سرد و نوشیدنی",
-    "desc": "",
-    "rating": null,
-    "discount": 0,
-    "popular": false,
-    "image": "images/1783781589855-شیکقهوه.jpeg",
-    "emoji": "☕"
-  },
-  {
-    "id": 1783781662451,
-    "name": "شیک توت فرنگی",
-    "price": "-",
-    "category": "بستنی و شیک",
-    "desc": "",
-    "rating": null,
-    "discount": 0,
-    "popular": false,
-    "image": "images/1783781660074-شیکتوت.jpg",
-    "emoji": "☕"
   }
 ]
