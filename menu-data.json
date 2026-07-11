@@ -514,5 +514,17 @@
     "popular": false,
     "image": "images/1783780778394-رد-موهیتو.jpg",
     "emoji": "☕"
+  },
+  {
+    "id": 1783780856797,
+    "name": "بلو موهیتو",
+    "price": "-",
+    "category": "بار سرد و نوشیدنی",
+    "desc": "",
+    "rating": null,
+    "discount": 0,
+    "popular": false,
+    "image": "images/1783780854541-بلوموهیتو.jpg",
+    "emoji": "☕"
   }
 ]
