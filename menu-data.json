@@ -41,9 +41,9 @@
     "price": "-",
     "category": "بستنی و شیک",
     "desc": "",
-    "rating": null,
+    "rating": 4.6,
     "discount": 0,
-    "popular": false,
+    "popular": true,
     "image": "images/1783183846647-milkshake-shokolat.jpg",
     "emoji": "☕"
   },
